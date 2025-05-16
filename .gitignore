@@ -1,0 +1,29 @@
+# Arduino IDE temporary files
+*.tmp
+*.bak
+*.log
+*.autosave
+
+# Build files
+build/
+*.o
+*.a
+*.elf
+*.bin
+*.map
+*.hex
+
+# Local configuration files
+*.local
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Other
+*.zip
+*.tar.gz
+
+# User-specific files (if any, add here)
+# Example: my_notes.txt
+
