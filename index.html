@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Interactive Hacking Toolkit</title>
+    <link rel="stylesheet" href="dark_theme.css">
+    <link rel="stylesheet" href="interactive_style.css">
+    <!-- Placeholder for Chart.js or other graphing library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>ESP32 Interactive Hacking Toolkit</h1>
+    </header>
+
+    <main>
+        <section id="initial-choice" class="section-card text-center">
+            <h2>Выберите Режим Работы:</h2>
+            <button id="btn-internet-mode" class="choice-button">Интернет Утилиты</button>
+            <button id="btn-wifi-mode" class="choice-button">Wi-Fi Утилиты</button>
+        </section>
+
+        <!-- Раздел для Интернет-утилит (скрыт по умолчанию) -->
+        <section id="internet-section" class="section-card hidden">
+            <h2>Интернет Утилиты</h2>
+            <div class="input-group">
+                <label for="url-input">Введите URL для анализа:</label>
+                <input type="text" id="url-input" placeholder="https://example.com">
+                <button id="analyze-url-btn">Анализировать</button>
+            </div>
+            <div id="internet-results" class="results-area">
+                <p>Введите URL и нажмите "Анализировать" для отображения потенциальных уязвимостей.</p>
+            </div>
+        </section>
+
+        <!-- Раздел для Wi-Fi утилит (скрыт по умолчанию) -->
+        <section id="wifi-section" class="section-card hidden">
+            <h2>Wi-Fi Утилиты</h2>
+            
+            <div id="wifi-scan-controls" class="control-group">
+                <button id="scan-wifi-btn">Сканировать Wi-Fi Сети</button>
+            </div>
+
+            <div id="wifi-scan-results-container" class="results-area">
+                <h3>Результаты Сканирования Сети:</h3>
+                <table id="wifi-scan-table">
+                    <thead>
+                        <tr>
+                            <th>SSID</th>
+                            <th>BSSID</th>
+                            <th>RSSI (dBm)</th>
+                            <th>Канал</th>
+                            <th>Шифрование</th>
+                            <th>Производитель</th>
+                            <th>Клиенты</th> <!-- Постараемся заполнить -->
+                        </tr>
+                    </thead>
+                    <tbody id="wifi-scan-table-body">
+                        <!-- Данные сканирования будут здесь -->
+                    </tbody>
+                </table>
+                <p id="hidden-networks-info">Обнаружены скрытые сети: <span id="hidden-networks-count">0</span></p>
+            </div>
+
+            <div id="wifi-analytics" class="analytics-area">
+                <h3>Аналитика и Статистика Wi-Fi:</h3>
+                <div class="chart-container">
+                    <canvas id="rssi-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="encryption-chart"></canvas>
+                </div>
+            </div>
+
+            <div id="wifi-attacks-container">
+                <h3>Доступные Wi-Fi Атаки:</h3>
+                
+                <!-- Deauth Attack -->
+                <div class="attack-card">
+                    <h4>Deauth Атака</h4>
+                    <div class="input-group">
+                        <label for="deauth-bssid">Целевой BSSID:</label>
+                        <input type="text" id="deauth-bssid" placeholder="XX:XX:XX:XX:XX:XX">
+                    </div>
+                    <div class="input-group">
+                        <label for="deauth-client-mac">MAC клиента (оставьте пустым для broadcast):</label>
+                        <input type="text" id="deauth-client-mac" placeholder="YY:YY:YY:YY:YY:YY">
+                    </div>
+                    <div class="input-group">
+                        <label for="deauth-packets">Количество пакетов:</label>
+                        <input type="number" id="deauth-packets" value="100" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="deauth-interval">Интервал (мс):</label>
+                        <input type="number" id="deauth-interval" value="100" min="10">
+                    </div>
+                    <div class="input-group">
+                        <label for="deauth-duration">Продолжительность (с, 0 - бесконечно):</label>
+                        <input type="number" id="deauth-duration" value="0" min="0">
+                    </div>
+                    <button id="start-deauth-btn" class="attack-button">Начать Deauth</button>
+                    <button id="stop-deauth-btn" class="attack-button hidden">Остановить Deauth</button>
+                    <p id="deauth-status" class="attack-status"></p>
+                </div>
+
+                <!-- Beacon Spam Attack -->
+                <div class="attack-card">
+                    <h4>Beacon Spam Атака</h4>
+                    <div class="input-group">
+                        <label for="beacon-ssid-count">Количество SSID:</label>
+                        <input type="number" id="beacon-ssid-count" value="10" min="1">
+                    </div>
+                     <div class="input-group">
+                        <label for="beacon-interval">Интервал (мс):</label>
+                        <input type="number" id="beacon-interval" value="100" min="10">
+                    </div>
+                    <div class="input-group">
+                        <label for="beacon-encryption">Тип шифрования фейковых AP:</label>
+                        <select id="beacon-encryption">
+                            <option value="open">Open</option>
+                            <option value="wpa_psk">WPA-PSK</option> 
+                        </select>
+                    </div>
+                    <button id="start-beacon-btn" class="attack-button">Начать Beacon Spam</button>
+                    <button id="stop-beacon-btn" class="attack-button hidden">Остановить Beacon Spam</button>
+                    <p id="beacon-status" class="attack-status"></p>
+                </div>
+
+                <!-- Probe Flood Attack -->
+                <div class="attack-card">
+                    <h4>Probe Request Flood Атака</h4>
+                    <div class="input-group">
+                        <label for="probe-requests">Количество запросов:</label>
+                        <input type="number" id="probe-requests" value="1000" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="probe-interval">Интервал (мс):</label>
+                        <input type="number" id="probe-interval" value="50" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="probe-duration">Продолжительность (с, 0 - бесконечно):</label>
+                        <input type="number" id="probe-duration" value="0" min="0">
+                    </div>
+                    <button id="start-probe-btn" class="attack-button">Начать Probe Flood</button>
+                    <button id="stop-probe-btn" class="attack-button hidden">Остановить Probe Flood</button>
+                    <p id="probe-status" class="attack-status"></p>
+                </div>
+
+                <!-- ACK Flood Attack -->
+                <div class="attack-card">
+                    <h4>ACK Flood Атака</h4>
+                     <div class="input-group">
+                        <label for="ack-bssid">Целевой BSSID:</label>
+                        <input type="text" id="ack-bssid" placeholder="XX:XX:XX:XX:XX:XX">
+                    </div>
+                    <div class="input-group">
+                        <label for="ack-packets">Количество пакетов:</label>
+                        <input type="number" id="ack-packets" value="1000" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="ack-interval">Интервал (мс):</label>
+                        <input type="number" id="ack-interval" value="10" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="ack-duration">Продолжительность (с, 0 - бесконечно):</label>
+                        <input type="number" id="ack-duration" value="0" min="0">
+                    </div>
+                    <button id="start-ack-btn" class="attack-button">Начать ACK Flood</button>
+                    <button id="stop-ack-btn" class="attack-button hidden">Остановить ACK Flood</button>
+                    <p id="ack-status" class="attack-status"></p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p class="text-center">&copy; 2025 ESP32 Interactive Hacking Toolkit. Только для этичного использования.</p>
+    </footer>
+
+    <script src="interactive_script.js"></script>
+</body>
+</html>

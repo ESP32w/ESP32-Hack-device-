@@ -1,0 +1,95 @@
+/* dark_theme.css */
+
+body {
+    background-color: #1a1a1a; /* Dark grey background */
+    color: #00ff00; /* Bright green text */
+    font-family: 'Courier New', Courier, monospace; /* Monospaced font for a hacker theme */
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #00cc00; /* Slightly darker green for headings */
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+h1 {
+    font-size: 2.5em;
+    text-align: center;
+    text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+}
+
+p {
+    color: #00dd00; /* Slightly adjusted green for paragraphs for readability */
+    margin-bottom: 1em;
+}
+
+a {
+    color: #33ff33; /* Lighter green for links */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #66ff66; /* Even lighter green on hover */
+    text-decoration: underline;
+}
+
+/* Navigation styling */
+nav {
+    background-color: #111111; /* Very dark background for nav */
+    padding: 10px 0;
+    text-align: center;
+    border-bottom: 1px solid #003300; /* Dark green border */
+    margin-bottom: 30px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #00ff00;
+    font-size: 1.1em;
+}
+
+nav ul li a:hover {
+    color: #66ff66;
+    text-decoration: none;
+    text-shadow: 0 0 3px #00ff00;
+}
+
+/* Section/Card styling */
+.section-card {
+    background-color: #222222; /* Darker card background */
+    border: 1px solid #004400; /* Dark green border for cards */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+}
+
+.section-card h2 {
+    margin-top: 0;
+    border-bottom: 1px solid #003300;
+    padding-bottom: 10px;
+}
+
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.highlight {
+    color: #ffff00; /* Yellow highlight for important text, can be adjusted */
+    font-weight: bold;
+}
+
